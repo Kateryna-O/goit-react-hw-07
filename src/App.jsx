@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import SearchBox from "./components/SearchBox/SearchBox";
@@ -8,6 +8,7 @@ import {
   addContact,
   deleteContact,
   selectContacts,
+  setContacts,
 } from "../src/redux/contactsSlice";
 import { selectFilter, changeFilter } from "./redux/filtersSlice";
 
@@ -17,25 +18,19 @@ function App() {
   const nameFilter = useSelector(selectFilter);
 
   useEffect(() => {
-    const savedContacts = localStorage.getItem("contacts");
-    if (savedContacts) {
-      JSON.parse(savedContacts).forEach((contact) => {
-        dispatch(addContact(contact));
-      });
-    }
+    const savedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
+    dispatch(setContacts(savedContacts));
   }, [dispatch]);
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
 
   const handleSearchChange = (searchQuery) => {
     dispatch(changeFilter(searchQuery));
   };
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(nameFilter.toLowerCase())
-  );
+  const filteredContacts = Array.isArray(contacts)
+    ? contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(nameFilter.toLowerCase())
+      )
+    : [];
 
   return (
     <div>
