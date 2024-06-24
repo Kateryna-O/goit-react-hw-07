@@ -1,12 +1,23 @@
 import css from "./SearchBox.module.css";
-const SearchBox = ({ searchQuery, setSearchQuery }) => {
+
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilter, changeFilter } from "../../redux/filtersSlice";
+
+const SearchBox = () => {
+  const dispatch = useDispatch();
+  const nameFilter = useSelector(selectFilter);
+
+  const handleSearchChange = (searchQuery) => {
+    dispatch(changeFilter(searchQuery));
+  };
+
   const handleChange = (event) => {
-    setSearchQuery(event.target.value);
+    handleSearchChange(event.target.value);
   };
   return (
     <input
       type="text"
-      value={searchQuery}
+      value={nameFilter}
       onChange={handleChange}
       placeholder="Search contacts"
       className={css.input}
