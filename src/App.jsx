@@ -1,17 +1,15 @@
-import { useEffect } from "react";
 import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import SearchBox from "./components/SearchBox/SearchBox";
 import ContactList from "./components/ContactList/ContactList";
 import { useDispatch } from "react-redux";
-import { setContacts } from "./redux/contactsSlice";
+import { useEffect } from "react";
+import { fetchContacts } from "./redux/contactsOps";
 
 function App() {
   const dispatch = useDispatch();
-
   useEffect(() => {
-    const savedContacts = JSON.parse(localStorage.getItem("contacts")) || [];
-    dispatch(setContacts(savedContacts));
+    dispatch(fetchContacts());
   }, [dispatch]);
 
   return (
